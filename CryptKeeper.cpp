@@ -7,7 +7,7 @@
 
 #include <iostream>//Includes <iostream> for In/Out
 #include <string>//Includes <std::string> for linguistic input
-#include <cctype>
+#include <cctype>//Includes <cctype> for string/char specific logic
 
 /*---Preprocessor Directives---*/
 
