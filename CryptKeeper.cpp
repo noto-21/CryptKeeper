@@ -65,8 +65,12 @@ std::string Caesar(std::string inC, int keyC, int encdecC)
 		return newStr;
 
 		break;
+
+	default:
+		throw std::invalid_argument("Invalid encdecC value");//Throw an exception for invalid input
 	}
 }
+
 std::string Vigenere(std::string inV, char keyV, int encdecV)
 {
 	int keyVInt = std::tolower(keyV) - 'a';//Convert the key character to an integer index
