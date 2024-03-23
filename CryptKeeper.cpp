@@ -21,6 +21,27 @@ const std::string clear_cmd = "clear";
 
 /*---Functions---*/
 
+//Catches input that cannot be converted to a string
+void STOI_CATCH(std::string& bIn, int& b)
+{
+    bool caught = false;
+
+    while (!caught)
+    {
+        try
+        {
+            b = stoi(bIn);
+
+            caught = true;
+        }
+        catch (std::invalid_argument const& ex)
+        {
+            std::cout << "\nINVALID INPUT!  Try again please [1/2]: ";
+            std::cin >> bIn;
+        }
+    }
+}
+
 bool Val(std::string inV)//Validates input of text for Caesar
 {
 	for (char c : inV)
@@ -130,9 +151,9 @@ int main()
 {
 	/*---Declarations---*/
 
-	int keyC = 7, choice[2];//Declares all necessary integers
+	int keyC = 7;//Declares all necessary integers
 
-	std::string in, keyV;//Declares all necessary strings
+	std::string in, keyV, choice[2];//Declares all necessary strings
 
 	char repeat = 'C';//Declares all necessary characters
 
@@ -153,32 +174,43 @@ int main()
 		std::cout << "\n\nGreetings, and welcome to Crypt-Keeper!\nCrypt-Keeper can encrypt and decrypt\nCaesar and Vigen\x8Are cipher-text\nincluding characters ranging between\ndecimal-values >48-122< on the ASCII table."
 			<< "\n\nWould you like to:\n\n[1]Encrypt input, or\n[2]Decrypt input?\nPlease make your selection of [1]/[2] below:\n-->";
 		std::cin >> choice[0];
-		while (choice[0] != 1 && choice[0] != 2)//Prevents erroneous input
+
+		//Ensure that input is an integer
+		STOI_CATCH(choice[0], keyC);
+
+		while (stoi(choice[0]) != 1 && stoi(choice[0]) != 2)//Prevents erroneous input
 		{
-			std::cout << "\n\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: --> ";
+			std::cout << "\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: --> ";
 			std::cin >> choice[0];
+
+			STOI_CATCH(choice[0], keyC);
 		}
 
-		switch (choice[0])//Switch for encrypt/decrypt
+		switch (stoi(choice[0]))//Switch for encrypt/decrypt
 		{
 		case 1://Encrypt
 		{
 			std::cout << "\n\nWould you like to use:\n\n[1]Caesar Cypher, or\n[2]Vigen\x8Are Cypher?\nPlease make your selection of [1]/[2] below:\n-->";
 			std::cin >> choice[1];
-			while (choice[1] != 1 && choice[1] != 2)//Prevents erroneous input
+
+			STOI_CATCH(choice[1], keyC);
+
+			while (stoi(choice[1]) != 1 && stoi(choice[1]) != 2)//Prevents erroneous input
 			{
-				std::cout << "\n\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: --> ";
+				std::cout << "\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: --> ";
 				std::cin >> choice[1];
+
+				STOI_CATCH(choice[1], keyC);
 			}
 
-			switch (choice[1])//Switch for Caesar/Vigenere
+			switch (stoi(choice[1]))//Switch for Caesar/Vigenere
 			{
 			case 1://Caesar
 				std::cout << "\n\nPlease input your text to be encrypted via Caesar Cypher:" << std::endl;
 				std::getline(std::cin >> std::ws, in);//Gets whole input on line
 				//Action contingent on correct/incorrect input
 				if (Val(in))
-					std::cout << "\nYour Caesar-encrypted text is: " << Caesar(in, keyC, choice[0]);//Output final value
+					std::cout << "\nYour Caesar-encrypted text is: " << Caesar(in, keyC, stoi(choice[0]));//Output final value
 				else
 					std::cout << "\nINVALID!  Please input expected characters only [i.e. ASCII values 48-122]!";//Output error message and restart
 
@@ -196,7 +228,7 @@ int main()
 				std::getline(std::cin >> std::ws, in);//Gets whole input on line
 				//Action contingent on correct/incorrect input
 				if (Val(in))
-					std::cout << "\nYour Vigen\x8Are-encrypted text is: " << Vigenere(in, keyV[0], choice[0]);//Output final value
+					std::cout << "\nYour Vigen\x8Are-encrypted text is: " << Vigenere(in, keyV[0], stoi(choice[0]));//Output final value
 				else
 					std::cout << "\nINVALID!  Please input expected characters only [i.e. ASCII values 48-122]!";//Output error message and restart
 
@@ -209,20 +241,25 @@ int main()
 		{
 			std::cout << "\n\nWould you like to use:\n\n[1]Caesar Cypher, or\n[2]Vigen\x8Are Cypher?\nPlease make your selection of [1]/[2] below:\n-->";
 			std::cin >> choice[1];
-			while (choice[1] != 1 && choice[1] != 2)
+
+			STOI_CATCH(choice[1], keyC);
+
+			while (stoi(choice[1]) != 1 && stoi(choice[1]) != 2)
 			{
-				std::cout << "\n\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: ";
+				std::cout << "\nINVALID INPUT!  Please input only those values which correspond to given options [i.e. 1 or 2]: ";
 				std::cin >> choice[1];
+
+				STOI_CATCH(choice[1], keyC);
 			}
 
-			switch (choice[1])//Switch for Caesar/Vigenere
+			switch (stoi(choice[1]))//Switch for Caesar/Vigenere
 			{
 			case 1://Caesar
 				std::cout << "\n\nPlease input your text to be decrypted via Caesar Cypher:" << std::endl;
 				std::getline(std::cin >> std::ws, in);//Gets whole input on line
 				//Action contingent on correct/incorrect input
 				if (Val(in))
-					std::cout << "\nYour Caesar-decrypted text is: " << Caesar(in, keyC, choice[0]);//Output final value
+					std::cout << "\nYour Caesar-decrypted text is: " << Caesar(in, keyC, stoi(choice[0]));//Output final value
 				else
 					std::cout << "\nINVALID!  Please input expected characters only [i.e. ASCII values 48-122]!";//Output error message and restart
 
@@ -240,7 +277,7 @@ int main()
 				std::getline(std::cin >> std::ws, in);//Gets whole input on line
 				//Action contingent on correct/incorrect input
 				if (Val(in))
-					std::cout << "\nYour Vigen\x8Are-decrypted text is: " << Vigenere(in, keyV[0], choice[0]);//Output final value
+					std::cout << "\nYour Vigen\x8Are-decrypted text is: " << Vigenere(in, keyV[0], stoi(choice[0]));//Output final value
 				else
 					std::cout << "\nINVALID!  Please input expected characters only [i.e. ASCII values 48-122]!";//Output error message and restart
 
@@ -250,7 +287,7 @@ int main()
 		break;
 
 		default:
-			std::cout << "\n\nERROR ENCRYPTING/DECRYPTING!  RESTART NOW!";
+			std::cout << "\nERROR ENCRYPTING/DECRYPTING!  RESTART NOW!";
 
 			break;
 		}
@@ -258,7 +295,7 @@ int main()
 		/*---Final Output---*/
 
 		//Ask user if they want to repeat the program
-		std::cout << "\n\n\nBegin again? [C/E]: ";
+		std::cout << "\nBegin again? [C/E]: ";
 		std::cin >> repeat;
 
 		switch (repeat)
@@ -274,7 +311,7 @@ int main()
 		}
 	}while (repeat == 'C' || repeat == 'c');
 
-	std::cout << "\n\nThank you for choosing Crypt-Keeper! :]\n\n" << std::endl;//Final message
+	std::cout << "\nThank you for choosing Crypt-Keeper! :]\n" << std::endl;//Final message
 
 	/*---Concluding operations---*/
 
